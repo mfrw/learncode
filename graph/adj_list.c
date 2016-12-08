@@ -82,7 +82,3 @@ void print_graph(struct graph_t *graph) {
 }
 
 
-int main() {
-	int vert = 100;
-	struct graph_t *graph = create_graph(vert);
-}
