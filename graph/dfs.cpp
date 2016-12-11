@@ -34,7 +34,7 @@ void graph::add_edge(int src, int dest)
 {
 	alist[src].push_back(dest);
 }
-void graph::add_edge(int src, int dest, bool dag = false)
+void graph::add_edge(int src, int dest, bool dag)
 {
 	alist[src].push_back(dest);
 	if(!dag) // if its not a dag then have a edge in the dest list too
@@ -49,3 +49,16 @@ void graph::dfs(int src)
 	dfsutil(src, visited);
 }
 
+
+int main() {
+	graph g(4);
+	g.add_edge(0, 1, false);
+	g.add_edge(0, 2, false);
+	g.add_edge(1, 2, false);
+	g.add_edge(2, 3, false);
+
+	cout << "following is dfs \n";
+	g.dfs(2);
+	cout << endl;
+	return 0;
+}
