@@ -8,12 +8,14 @@ class graph {
 	int verts;
 	list<int> *alist;
 	void dfsutil(int v, bool visited[]);
+	bool iscyclicutil(int v, bool visitied[], bool *rs);
 	public:
 	graph(int v);
 	void add_edge(int src, int dest);
 	void add_edge(int src, int dest, bool dag);
 	void dfs(int src);
 	void bfs(int src);
+	bool iscyclic(void);
 };
 
 graph::graph(int v)
@@ -73,6 +75,33 @@ void graph::bfs(int src)
 		}
 	}
 }
+bool graph::iscyclicutil(int src, bool visited[], bool *stack)
+{
+	if(visited[src] == false) {
+		visited[src] = stack[src] = true;
+		list<int>::iterator i;
+		for(i = alist[src].begin(); i != alist[src].end(); i++) {
+			if(!visited[*i] && iscyclicutil(*i, visited, stack))
+				return true;
+			else if(stack[*i])
+				return true;
+		}
+	}
+	stack[src] = false;
+	return false;
+}
+
+bool graph::iscyclic()
+{
+	bool *visited = new bool[verts];
+	bool *stack = new bool[verts];
+	for(int i = 0; i < verts; i++)
+		visited[i] = stack[i] = false;
+	for(int i = 0; i < verts; i++)
+		if(iscyclicutil(i, visited, stack))
+			return true;
+	return false;
+}
 
 
 
@@ -87,9 +116,14 @@ int main() {
 	g.add_edge(5, 0, false);
 
 	cout << "following is dfs \n";
-	g.dfs(0);
+	g.dfs(5);
 	cout << endl;
 	cout << "following is bfs \n";
+	g.bfs(5);
+	if(g.iscyclic())
+		cout << "\nfollowing graph is cyclic" << endl;
+	else
+		cout << "\nfollowing graph is not cyclic" << endl;
 	g.bfs(0);
 	cout << endl;
 	return 0;
