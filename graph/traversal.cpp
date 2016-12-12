@@ -16,6 +16,7 @@ class graph {
 	void dfs(int src);
 	void bfs(int src);
 	bool iscyclic(void);
+	bool ispath(int src, int dest);
 };
 
 graph::graph(int v)
@@ -103,6 +104,36 @@ bool graph::iscyclic()
 	return false;
 }
 
+bool graph::ispath(int src, int dest)
+{
+	if(src == dest)
+		return true;
+
+	bool *visited = new bool[verts];
+	for(int i = 0; i < verts; i++)
+		visited[i] = false;
+	list<int> queue;
+	visited[src] = true;
+	queue.push_back(src);
+
+	list<int>::iterator i;
+	while(!queue.empty()) {
+		src = queue.front();
+		queue.pop_front();
+		for(i = alist[src].begin(); i != alist[src].end(); i++) {
+			if(*i == dest)
+				return true;
+			if(!visited[*i]) {
+				visited[*i] = true;
+				queue.push_back(*i);
+			}
+		}
+	}
+	return false;
+}
+
+
+
 
 
 int main() {
@@ -126,5 +157,9 @@ int main() {
 		cout << "\nfollowing graph is not cyclic" << endl;
 	g.bfs(0);
 	cout << endl;
+	if(g.ispath(1,4))
+		cout <<"\npath b/w 1 & 4\n";
+	else
+		cout <<"\nno path b/w 1 & 4\n";
 	return 0;
 }
